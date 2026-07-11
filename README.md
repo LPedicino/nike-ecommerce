@@ -22,120 +22,87 @@ Hi, I'm Leandro. This project is a full-featured E-commerce clone built with Vit
 
 ---
 
-## 🚀 DevOps Infrastructure Lab: Migration to Kubernetes
+# Nike E-commerce: Infrastructure Lifecycle Lab
 
-This repository serves as a practical demonstration of modern infrastructure management. We have transitioned from a containerized Docker Swarm setup to a production-grade **Kubernetes (k8s)** architecture using **Minikube**.
+## Project Overview
+This repository documents the end-to-end infrastructure evolution of a React-based E-commerce application. We transitioned from a standard local development environment to a containerized architecture (**Docker Swarm**) and finally to a production-grade orchestrator (**Kubernetes**).
+
+---
+
+## 🛠️ Technology Stack
+* **Docker Desktop**: The virtualization engine used to manage container runtimes and simulate local environments.
+* **Docker Swarm**: A native Docker tool used for container orchestration and service management.
+* **Minikube**: A tool that runs a local Kubernetes cluster, simulating a cloud-based server environment.
+* **kubectl**: The official command-line interface used to manage, inspect, and communicate with the Kubernetes API.
+
+---
+
+## 🏗️ Infrastructure Lifecycle
+
+### Phase 1: Containerization & Docker Swarm Orchestration
+1. **Repository Setup**: Cloned the source application and established the container boundary using a custom `Dockerfile` (optimized with Nginx for static serving).
+2. **Local Orchestration**: Implemented `docker-compose.yml` to define service network, replicas, and local volume configurations for Docker Swarm compatibility.
+3. **Swarm Validation**: Initialized Swarm mode to validate service scaling and load balancing basics in a local environment.
+
+### Phase 2: Migration to Kubernetes (k8s)
+1. **Manifest Architecture**: Decoupled service configuration into declarative YAML files stored in `/k8s`.
+    * `deployment.yaml`: Defines the desired state, including pod replicas, image pull policies, and resource health checks.
+    * `service.yaml`: Configures network abstraction to expose the application fleet.
+2. **Cluster Orchestration**: Deployed the stack to a **Minikube** cluster, ensuring state management and service discovery.
+
+---
+
+## 🚀 Deployment Guide (Step-by-Step)
 
 ### Prerequisites
-Before beginning, ensure you have the following tools installed and configured:
+Ensure the following tools are installed:
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+* [Minikube](https://minikube.sigs.k8s.io/docs/start/)
+* [kubectl](https://kubernetes.io/docs/tasks/tools/)
 
-* **[Docker Desktop](https://www.docker.com/products/docker-desktop/)**: The virtualization engine used to manage container runtimes.
-* **[Minikube](https://minikube.sigs.k8s.io/docs/start/)**: A local Kubernetes implementation that mimics a cloud-based server cluster.
-* **[kubectl](https://kubernetes.io/docs/tasks/tools/)**: The official command-line interface for communicating with the Kubernetes API.
-
----
-
-### Deployment Workflow (Step-by-Step)
-
-Follow these steps to replicate the environment on your local machine:
-
-1.  **Initialize the Local Cluster**
-    ```bash
-    minikube start
-    ```
-    *Starts the virtual Kubernetes environment on your machine.*
-
-2.  **Configure Terminal Environment**
-    ```bash
-    minikube -p minikube docker-env --shell powershell | Invoke-Expression
-    ```
-    *Points your terminal to Minikube's internal Docker daemon, allowing you to build images directly inside the cluster.*
-
-3.  **Build the Container Image**
-    ```bash
-    docker build -t nike-web:latest .
-    ```
-    *Packages the application source code into a standardized container image.*
-
-4. **Deploy to Kubernetes**
-    ```bash
-    kubectl apply -f k8s/
-    ```
-    *Instructs the Kubernetes orchestrator to execute the deployment and service configurations defined in the `k8s/` directory.*
-
-5. **Verify Cluster State**
-    ```bash
-    kubectl get pods
-    ```
-    *Monitors the deployment. Wait for the pod status to transition from `Pending` to `Running`.*
-
-6. **Expose the Service**
-    ```bash
-    minikube service nike-web-service
-    ```
-    *Establishes a secure networking tunnel from the cluster to your local host, opening the application in your default browser.*
-
-7. **Teardown (Post-Development)**
-    ```bash
-    minikube stop
-    ```
-    *Properly terminates the cluster to release allocated system RAM and CPU resources.*
+### Workflow
+1. **Start Cluster**: `minikube start`
+2. **Configure Terminal Bridge**: `minikube -p minikube docker-env --shell powershell | Invoke-Expression`
+3. **Build Container Image**: `docker build -t nike-web:latest .`
+4. **Deploy Manifests**: `kubectl apply -f k8s/`
+5. **Verify Readiness**: `kubectl get pods`
+6. **Access App**: `minikube service nike-web-service`
+7. **Teardown**: `minikube stop`
 
 ---
 
-## 🇪🇸 Laboratorio de Infraestructura DevOps: Migración a Kubernetes
+## 🇪🇸 Bitácora Técnica: Laboratorio de Migración DevOps
 
-Este repositorio demuestra la transición técnica desde una orquestación basada en contenedores simples hacia una arquitectura profesional de **Kubernetes (k8s)** utilizando **Minikube**.
+Este documento detalla la evolución técnica del proyecto Nike E-commerce. Pasamos de una aplicación estática a una arquitectura orquestada, validando el proceso primero con Docker y escalando finalmente a Kubernetes.
 
-### Requisitos previos
-Para ejecutar este laboratorio, asegúrate de tener instaladas las siguientes herramientas:
+### Fases de Ejecución
+1. **Contenerización**: Creamos un `Dockerfile` optimizado con Nginx.
+2. **Orquestación con Swarm**: Implementamos `docker-compose.yml` para gestionar la arquitectura.
+3. **Migración a Kubernetes**: Creamos la carpeta `k8s/` con los manifiestos `deployment.yaml` (gestión de pods) y `service.yaml` (gestión de red).
 
-* **[Docker Desktop](https://www.docker.com/products/docker-desktop/)**: Plataforma necesaria para gestionar los contenedores.
-* **[Minikube](https://minikube.sigs.k8s.io/docs/start/)**: Entorno que simula un clúster de servidores profesional en tu equipo local.
-* **[kubectl](https://kubernetes.io/docs/tasks/tools/)**: Herramienta de línea de comandos para administrar el clúster.
+### Guía de Despliegue Profesional
+Para desplegar esta arquitectura, sigue estos pasos en tu terminal (PowerShell):
+
+1. **Iniciar Clúster**: `minikube start`
+2. **Vincular Terminal**: `minikube -p minikube docker-env --shell powershell | Invoke-Expression`
+3. **Build de Imagen**: `docker build -t nike-web:latest .`
+4. **Aplicar Manifiestos**: `kubectl apply -f k8s/`
+5. **Validar Pods**: `kubectl get pods`
+6. **Abrir Servicio**: `minikube service nike-web-service`
+7. **Detener Entorno**: `minikube stop`
 
 ---
 
-### Guía de Despliegue Paso a Paso
+### 💡 Troubleshooting & Best Practices
 
-Sigue estas instrucciones detalladas para replicar el entorno:
+* **Ensure Docker is Running**: Before initiating `minikube start`, confirm that Docker Desktop is fully initialized and the daemon is active.
+* **PowerShell Permissions**: If the `docker-env` command fails due to execution policy, run your terminal as Administrator or execute `Set-ExecutionPolicy RemoteSigned` in your PowerShell session.
+* **Resource Allocation**: Minikube consumes system resources. If your PC performance drops, ensure you have allocated enough RAM/CPU in Docker Desktop settings.
 
-1.  **Iniciar el clúster local**
-    ```bash
-    minikube start
-    ```
-    *Inicializa el entorno virtual que imita la infraestructura de un servidor real.*
+---
 
-2.  **Configurar el entorno de terminal**
-    ```bash
-    minikube -p minikube docker-env --shell powershell | Invoke-Expression
-    ```
-    *Vincular tu terminal al motor de Docker interno de Minikube asegura que las imágenes se construyan directamente dentro del clúster.*
+### 💡 Solución de problemas y buenas prácticas
 
-3.  **Construir la imagen del contenedor**
-    ```bash
-    docker build -t nike-web:latest .
-    ```
-    *Empaqueta el código fuente de tu aplicación en una imagen estándar de contenedor lista para producción.*
-
-4. **Desplegar en el clúster**
-    ```bash
-    kubectl apply -f k8s/
-    ```
-    *Ordena a Kubernetes ejecutar las configuraciones de despliegue y red contenidas en la carpeta `k8s/`.*
-
-5. **Verificar el estado del clúster**
-    ```bash
-    kubectl get pods
-    ```
-    *Supervisa los pods (instancias). Espera hasta que el estado cambie de `Pending` a **`Running`**.*
-
-6. **Acceder a la aplicación**
-    ```bash
-    minikube service nike-web-service
-    ```
-    *Establece un puente de red seguro hacia tu navegador, permitiéndote visualizar la aplicación desplegada.*
-
-7. **Apagado controlado**
-    ```bash
-    minikube stop
+* **Verifica que Docker esté activo**: Antes de iniciar `minikube start`, confirma que Docker Desktop esté totalmente inicializado y el daemon funcionando.
+* **Permisos de PowerShell**: Si el comando `docker-env` falla debido a la política de ejecución, abre tu terminal como Administrador o ejecuta `Set-ExecutionPolicy RemoteSigned` en tu sesión.
+* **Asignación de recursos**: Minikube consume recursos de sistema. Si notas que el rendimiento de tu PC disminuye, asegúrate de haber asignado suficiente RAM/CPU en la configuración de Docker Desktop.

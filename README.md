@@ -12,13 +12,10 @@
 Hi, I'm Leandro. This project is a full-featured E-commerce clone built with Vite and TailwindCSS, incorporating modern tools such as Redux Toolkit and React Toast.
 </h4>
 
-<br>
 
-<span align="center">
-
-##### :point_right: Live Demo: [Nike Shop](https://nike-ecommerce-tau.vercel.app/)
-
-</span>
+<p align="center">
+  <a href="https://nike-ecommerce-tau.vercel.app/"><strong>:point_right: Live Demo: Nike Shop</strong></a>
+</p>
 
 ---
 
@@ -27,6 +24,17 @@ Hi, I'm Leandro. This project is a full-featured E-commerce clone built with Vit
 ## Project Overview
 This repository documents the end-to-end infrastructure evolution of a React-based E-commerce application. We transitioned from a standard local development environment to a containerized architecture (**Docker Swarm**) and finally to a production-grade orchestrator (**Kubernetes**).
 
+---
+## 🏗️ Architecture
+
+```mermaid
+graph TD
+    User((User)) -->|HTTP/80| Service[Nike Web Service]
+    Service --> Pod1[Pod: Nike Web]
+    Service --> Pod2[Pod: Nike Web]
+    Pod1 -->|Nginx| Static[Static Assets]
+    Pod2 -->|Nginx| Static
+```
 ---
 
 ## 🛠️ Technology Stack
@@ -44,12 +52,30 @@ This repository documents the end-to-end infrastructure evolution of a React-bas
 2. **Local Orchestration**: Implemented `docker-compose.yml` to define service network, replicas, and local volume configurations for Docker Swarm compatibility.
 3. **Swarm Validation**: Initialized Swarm mode to validate service scaling and load balancing basics in a local environment.
 
+<p align="center">
+<img width="600" alt="docker-compose" src="assets/docker-compose.png">
+</p>
+<p align="center"><em>Figure 1: Service definition, replicas, and healthchecks in docker-compose.yml.</em></p>
+
 ### Phase 2: Migration to Kubernetes (k8s)
 1. **Manifest Architecture**: Decoupled service configuration into declarative YAML files stored in `/k8s`.
     * `deployment.yaml`: Defines the desired state, including pod replicas, image pull policies, and resource health checks.
     * `service.yaml`: Configures network abstraction to expose the application fleet.
 2. **Cluster Orchestration**: Deployed the stack to a **Minikube** cluster, ensuring state management and service discovery.
 
+<p align="center">
+<img width="600" alt="k8s-pods" src="assets/pods.jpeg">
+</p>
+<p align="center"><em>Figure 2: Verification of running pods within the Minikube cluster.</em></p>
+
+<br>
+
+<p align="center">
+  <img width="700" alt="nike-deploy" src="assets/deploy.jpeg">
+</p>
+<p align="center">
+  <em>Figure 3: Nike E-commerce application successfully deployed and running in the browser.</em>
+</p>
 ---
 
 ## 🚀 Deployment Guide (Step-by-Step)
@@ -71,38 +97,9 @@ Ensure the following tools are installed:
 
 ---
 
-## 🇪🇸 Bitácora Técnica: Laboratorio de Migración DevOps
-
-Este documento detalla la evolución técnica del proyecto Nike E-commerce. Pasamos de una aplicación estática a una arquitectura orquestada, validando el proceso primero con Docker y escalando finalmente a Kubernetes.
-
-### Fases de Ejecución
-1. **Contenerización**: Creamos un `Dockerfile` optimizado con Nginx.
-2. **Orquestación con Swarm**: Implementamos `docker-compose.yml` para gestionar la arquitectura.
-3. **Migración a Kubernetes**: Creamos la carpeta `k8s/` con los manifiestos `deployment.yaml` (gestión de pods) y `service.yaml` (gestión de red).
-
-### Guía de Despliegue Profesional
-Para desplegar esta arquitectura, sigue estos pasos en tu terminal (PowerShell):
-
-1. **Iniciar Clúster**: `minikube start`
-2. **Vincular Terminal**: `minikube -p minikube docker-env --shell powershell | Invoke-Expression`
-3. **Build de Imagen**: `docker build -t nike-web:latest .`
-4. **Aplicar Manifiestos**: `kubectl apply -f k8s/`
-5. **Validar Pods**: `kubectl get pods`
-6. **Abrir Servicio**: `minikube service nike-web-service`
-7. **Detener Entorno**: `minikube stop`
-
----
 
 ### 💡 Troubleshooting & Best Practices
 
 * **Ensure Docker is Running**: Before initiating `minikube start`, confirm that Docker Desktop is fully initialized and the daemon is active.
 * **PowerShell Permissions**: If the `docker-env` command fails due to execution policy, run your terminal as Administrator or execute `Set-ExecutionPolicy RemoteSigned` in your PowerShell session.
 * **Resource Allocation**: Minikube consumes system resources. If your PC performance drops, ensure you have allocated enough RAM/CPU in Docker Desktop settings.
-
----
-
-### 💡 Solución de problemas y buenas prácticas
-
-* **Verifica que Docker esté activo**: Antes de iniciar `minikube start`, confirma que Docker Desktop esté totalmente inicializado y el daemon funcionando.
-* **Permisos de PowerShell**: Si el comando `docker-env` falla debido a la política de ejecución, abre tu terminal como Administrador o ejecuta `Set-ExecutionPolicy RemoteSigned` en tu sesión.
-* **Asignación de recursos**: Minikube consume recursos de sistema. Si notas que el rendimiento de tu PC disminuye, asegúrate de haber asignado suficiente RAM/CPU en la configuración de Docker Desktop.
